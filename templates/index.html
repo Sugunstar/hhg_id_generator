@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Builder ID Generator — HH Goa 2026</title>
+  <meta name="description" content="Generate your on-brand Builder ID card for Hacker House Goa 2026. Upload, customize, and share with #FrameInGoa.">
+  <meta property="og:title" content="Builder ID Generator — HH Goa 2026">
+  <meta property="og:description" content="Create your Hacker House Goa 2026 Builder ID card. Upload your photo, get your builder class, and share it.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Builder ID Generator — HH Goa 2026">
+  <meta name="twitter:description" content="Generate your on-brand Builder ID card for Hacker House Goa 2026.">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Full Decorative Tree Background Strip along bottom -->
+  <div class="tree-border-bottom" aria-hidden="true"></div>
+
+  <!-- Page Background Blur Backdrop Overlay -->
+  <div id="backdrop-overlay" class="backdrop-overlay"></div>
+
+  <!-- Font preload: hidden elements force Google Fonts to load for Canvas -->
+  <div class="font-preload" aria-hidden="true">
+    <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800;">.</span>
+    <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:600;">.</span>
+    <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700;">.</span>
+    <span style="font-family:'Inter',sans-serif; font-weight:400;">.</span>
+    <span style="font-family:'Inter',sans-serif; font-weight:500;">.</span>
+    <span style="font-family:'JetBrains Mono',monospace; font-weight:500;">.</span>
+  </div>
+
+  <div class="container">
+
+    <!-- ── Header ──────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-top">
+        <a href="https://hhgoa.com/" target="_self" class="hh-logo-brand" title="Hacker House Goa">
+          <img src="assets/179-vector-54-30944.svg" alt="Hacker House Goa" class="hh-brand-svg-logo">
+        </a>
+        <span class="clock" id="live-clock">—:— · HH GOA 2026</span>
+      </div>
+      <h1>Builder ID <span class="accent">Generator</span></h1>
+      <p class="subtitle">
+        Upload your photo. Enter your details.
+        Get your HH Goa 2026 Builder ID card — download it, share it to X with <strong>#FrameInGoa</strong>.
+      </p>
+    </header>
+
+    <!-- ── Main content: Direct Inline Editable Card ── -->
+    <main class="card-builder-section">
+
+      <!-- Hidden file input for photo picker -->
+      <input type="file" id="file-input" accept="image/jpeg,image/png,image/heic,image/heif,.heic,.heif" style="display:none;">
+
+      <div class="card-builder-container">
+        
+        <!-- Tip text positioned above the card stage -->
+        <p class="download-hint">💡 Tip: Click on "Your Name" or "Full-stack / Dev" to edit directly. Press Enter when done.</p>
+
+        <!-- Slanted / Raised Card Stage -->
+        <div class="card-stage">
+          <!-- Interactive Card Canvas & Overlays -->
+          <div class="canvas-interactive-wrapper" id="card-wrapper">
+            <canvas id="card-canvas"></canvas>
+
+            <!-- Interactive Overlay Controls -->
+            <div class="card-overlay" id="card-overlay">
+              
+              <!-- Photo Circle Hotspot -->
+              <button type="button" class="photo-hotspot" id="photo-click-zone" title="Click to upload/change photo" aria-label="Upload photo">
+                <span class="photo-overlay-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                  <span>Add Photo</span>
+                </span>
+              </button>
+
+              <!-- Inline Editable Text Overlays -->
+              <div class="overlay-fields">
+                <div class="input-field-wrapper field-name" title="Click to edit Name">
+                  <input type="text" id="name-input" class="inline-input inline-name" placeholder="Your Name" value="" maxlength="40" autocomplete="off" spellcheck="false">
+                </div>
+                <div class="input-field-wrapper field-stack" title="Click to edit Stack / Role">
+                  <input type="text" id="stack-input" class="inline-input inline-stack" placeholder="Full-stack / Dev" value="" maxlength="60" autocomplete="off" spellcheck="false">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="heic-notice" id="heic-notice"></div>
+
+        <!-- Action Controls -->
+        <div class="action-buttons">
+          <button id="btn-download" class="btn-action btn-download">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            Download PNG
+          </button>
+          <button id="btn-share" class="btn-action btn-share">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0012 7.5v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            Share to X
+          </button>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ── Footer ──────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="deadline">⏰ DEADLINE: 11:59 PM, 13 AUG 2026</div>
+      <div class="credit">HH Goa 2026 · 28–31 Oct · Goa, IN</div>
+    </footer>
+
+  </div>
+
+  <!-- HEIC conversion library (loaded async, only needed for iPhone photos) -->
+  <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
+  <!-- Base64 asset store (prevents canvas tainting on file:// protocol) -->
+  <script src="assets-data.js"></script>
+  <!-- Card layout configuration (tweak sizes, positions, colours here) -->
+  <script src="card-config.js"></script>
+  <!-- Builder title mapping -->
+  <script src="builder-titles.js"></script>
+  <!-- Main app -->
+  <script src="app.js"></script>
+</body>
+</html>
