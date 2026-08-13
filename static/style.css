@@ -71,9 +71,9 @@ body::after {
 .tree-border-bottom {
   position: fixed;
   left: 0;
-  right: 0;
   bottom: 0;
-  height: 220px;
+  width: 100%;
+  aspect-ratio: 1440 / 887;
   background-image: url('assets/footer_trees.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -106,10 +106,22 @@ body::after {
 /* --- Header --- */
 .header {
   padding: 8px 0 14px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: none;
   margin-bottom: 0;
   flex-shrink: 0;
 }
+.header h1 {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header .subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 .header-top {
   display: flex;
@@ -530,15 +542,16 @@ body::after {
 }
 
 .btn-share {
-  background: transparent;
-  color: var(--sand);
-  border: 1px solid var(--sand-dim);
+  background: var(--sand);
+  color: var(--ink);
+  border: none;
 }
 
 .btn-share:hover {
-  border-color: var(--sunrise);
-  color: var(--sunrise);
+  background: #fff;
+  color: var(--ink);
   transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(242, 235, 221, 0.2);
 }
 
 .btn-action svg {
