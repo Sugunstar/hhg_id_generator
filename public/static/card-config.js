@@ -12,8 +12,8 @@ const CARD_CONFIG = {
   canvas: {
     width: 1200,       // logical width  (exported PNG = width × renderScale)
     height: 500,        // logical height
-    minRenderScale: 10,  // minimum backing-store multiplier (3 = 3600×1500 export)
-    maxRenderScale: 12,  // cap for very-high-DPI screens
+    minRenderScale: 1,   // minimum backing-store multiplier
+    maxRenderScale: 3,   // cap for high-DPI screens (3600×1500 export)
   },
 
   // ── Photo Circle Badge ──────────────────────────────────────

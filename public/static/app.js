@@ -51,6 +51,9 @@
 
   // ── Card Interaction State Management ────────────────────
   let isMouseDownInsideCard = false;
+  let isEditing = false;
+  let debouncedRenderTimer = null;
+  let pendingAnimationFrame = null;
 
   function focusCard(targetInput) {
     if (cardWrapper) cardWrapper.classList.add('is-focused');
@@ -102,23 +105,37 @@
     }
 
     if (nameInput) {
-      nameInput.addEventListener('focus', () => focusCard(nameInput));
+      nameInput.addEventListener('focus', () => {
+        isEditing = true;
+        focusCard(nameInput);
+      });
+      nameInput.addEventListener('blur', () => {
+        ensureFullExportRender();
+      });
       nameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
         }
       });
+      nameInput.addEventListener('input', scheduleDebouncedRender);
     }
 
     if (stackInput) {
-      stackInput.addEventListener('focus', () => focusCard(stackInput));
+      stackInput.addEventListener('focus', () => {
+        isEditing = true;
+        focusCard(stackInput);
+      });
+      stackInput.addEventListener('blur', () => {
+        ensureFullExportRender();
+      });
       stackInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
         }
       });
+      stackInput.addEventListener('input', scheduleDebouncedRender);
     }
 
     document.addEventListener('keydown', (e) => {
@@ -156,10 +173,6 @@
       if (e.target.files && e.target.files[0]) handlePhoto(e.target.files[0]);
     });
 
-    // Direct live rendering on every input keypress
-    nameInput.addEventListener('input', renderCard);
-    stackInput.addEventListener('input', renderCard);
-
     // Download & Share
     btnDownload.addEventListener('click', downloadCard);
     btnShare.addEventListener('click', shareToX);
@@ -193,20 +206,44 @@
 
     // Re-sync backing-store resolution if devicePixelRatio changes
     window.addEventListener('resize', debounce(() => {
-      const dpr = Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
-      if (dpr !== canvas._dpr) {
-        setupCanvasForDPR();
+      const targetDpr = isEditing ? 1 : Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
+      if (targetDpr !== canvas._dpr) {
+        setupCanvasForDPR(!isEditing);
         renderCard();
       }
     }, 200));
   }
 
-  // ── High-DPI canvas setup (Bug 1 fix) ────────────────────────
-  function setupCanvasForDPR() {
-    const dpr = Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
+  // ── High-DPI canvas setup & Render Decoupling ─────────────────
+  function setupCanvasForDPR(forceHighRes = false) {
+    let dpr;
+    if (isEditing && !forceHighRes) {
+      dpr = 1; // 1x resolution preview while user is actively typing
+    } else {
+      dpr = Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
+    }
     canvas.width  = Math.round(CANVAS_W * dpr);
     canvas.height = Math.round(CANVAS_H * dpr);
     canvas._dpr = dpr;
+  }
+
+  function scheduleDebouncedRender() {
+    if (debouncedRenderTimer) clearTimeout(debouncedRenderTimer);
+    debouncedRenderTimer = setTimeout(() => {
+      if (pendingAnimationFrame) cancelAnimationFrame(pendingAnimationFrame);
+      pendingAnimationFrame = requestAnimationFrame(() => {
+        setupCanvasForDPR(false);
+        renderCard();
+      });
+    }, 100);
+  }
+
+  function ensureFullExportRender() {
+    if (debouncedRenderTimer) clearTimeout(debouncedRenderTimer);
+    if (pendingAnimationFrame) cancelAnimationFrame(pendingAnimationFrame);
+    isEditing = false;
+    setupCanvasForDPR(true);
+    renderCard();
   }
 
   // ── Clock ──────────────────────────────────────────────────
@@ -590,6 +627,7 @@
   }
 
   function downloadCard() {
+    ensureFullExportRender();
     const fileName = 'hhgoa-builder-id.png';
     let blob;
     try {
@@ -692,6 +730,7 @@
 
   // ── Share to X (Clean Clipboard + Native Intent) ────────────
   async function shareToX() {
+    ensureFullExportRender();
     const name = nameInput.value.trim() || 'Builder';
     const bTitle = generateBuilderTitle(stackInput.value.trim());
     const caption = `I'm ${name} — ${bTitle} 🚀\n\nReady to build at Hacker House Goa 2026! 🌊\n\n#FrameInGoa #HHGoa2026 #BuilderID`;
