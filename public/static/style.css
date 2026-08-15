@@ -71,17 +71,19 @@ body::after {
   z-index: 0;
 }
 
-/* --- Full Decorative Tree Background Strip Along Bottom --- */
+/* --- Full Decorative Tree Background Covering Full Viewport --- */
 .tree-border-bottom {
   position: fixed;
+  top: 0;
   left: 0;
+  right: 0;
   bottom: 0;
-  width: 100%;
-  aspect-ratio: 1440 / 887;
+  width: 100vw;
+  height: 100vh;
   background-image: url('assets/footer_trees.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: bottom center;
+  background-position: center bottom;
   pointer-events: none;
   z-index: 1;
   opacity: 0.85;

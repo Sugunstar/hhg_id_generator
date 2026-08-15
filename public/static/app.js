@@ -105,37 +105,25 @@
     }
 
     if (nameInput) {
-      nameInput.addEventListener('focus', () => {
-        isEditing = true;
-        focusCard(nameInput);
-      });
-      nameInput.addEventListener('blur', () => {
-        ensureFullExportRender();
-      });
+      nameInput.addEventListener('focus', () => focusCard(nameInput));
       nameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
         }
       });
-      nameInput.addEventListener('input', scheduleDebouncedRender);
+      nameInput.addEventListener('input', scheduleFastRender);
     }
 
     if (stackInput) {
-      stackInput.addEventListener('focus', () => {
-        isEditing = true;
-        focusCard(stackInput);
-      });
-      stackInput.addEventListener('blur', () => {
-        ensureFullExportRender();
-      });
+      stackInput.addEventListener('focus', () => focusCard(stackInput));
       stackInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
         }
       });
-      stackInput.addEventListener('input', scheduleDebouncedRender);
+      stackInput.addEventListener('input', scheduleFastRender);
     }
 
     document.addEventListener('keydown', (e) => {
@@ -206,44 +194,35 @@
 
     // Re-sync backing-store resolution if devicePixelRatio changes
     window.addEventListener('resize', debounce(() => {
-      const targetDpr = isEditing ? 1 : Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
-      if (targetDpr !== canvas._dpr) {
-        setupCanvasForDPR(!isEditing);
+      if (setupCanvasForDPR()) {
         renderCard();
       }
     }, 200));
   }
 
   // ── High-DPI canvas setup & Render Decoupling ─────────────────
-  function setupCanvasForDPR(forceHighRes = false) {
-    let dpr;
-    if (isEditing && !forceHighRes) {
-      dpr = 1; // 1x resolution preview while user is actively typing
-    } else {
-      dpr = Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
+  function setupCanvasForDPR() {
+    const dpr = Math.min(Math.max(window.devicePixelRatio || 1, MIN_RENDER_SCALE), MAX_DPR);
+    const targetW = Math.round(CANVAS_W * dpr);
+    const targetH = Math.round(CANVAS_H * dpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width  = targetW;
+      canvas.height = targetH;
+      canvas._dpr = dpr;
+      return true;
     }
-    canvas.width  = Math.round(CANVAS_W * dpr);
-    canvas.height = Math.round(CANVAS_H * dpr);
-    canvas._dpr = dpr;
+    return false;
   }
 
-  function scheduleDebouncedRender() {
-    if (debouncedRenderTimer) clearTimeout(debouncedRenderTimer);
-    debouncedRenderTimer = setTimeout(() => {
-      if (pendingAnimationFrame) cancelAnimationFrame(pendingAnimationFrame);
-      pendingAnimationFrame = requestAnimationFrame(() => {
-        setupCanvasForDPR(false);
+  let renderScheduled = false;
+  function scheduleFastRender() {
+    if (!renderScheduled) {
+      renderScheduled = true;
+      requestAnimationFrame(() => {
         renderCard();
+        renderScheduled = false;
       });
-    }, 100);
-  }
-
-  function ensureFullExportRender() {
-    if (debouncedRenderTimer) clearTimeout(debouncedRenderTimer);
-    if (pendingAnimationFrame) cancelAnimationFrame(pendingAnimationFrame);
-    isEditing = false;
-    setupCanvasForDPR(true);
-    renderCard();
+    }
   }
 
   // ── Clock ──────────────────────────────────────────────────
@@ -627,7 +606,6 @@
   }
 
   function downloadCard() {
-    ensureFullExportRender();
     const fileName = 'hhgoa-builder-id.png';
     let blob;
     try {
@@ -730,7 +708,6 @@
 
   // ── Share to X (Clean Clipboard + Native Intent) ────────────
   async function shareToX() {
-    ensureFullExportRender();
     const name = nameInput.value.trim() || 'Builder';
     const bTitle = generateBuilderTitle(stackInput.value.trim());
     const caption = `I'm ${name} — ${bTitle} 🚀\n\nReady to build at Hacker House Goa 2026! 🌊\n\n#FrameInGoa #HHGoa2026 #BuilderID`;
