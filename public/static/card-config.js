@@ -10,7 +10,7 @@ const CARD_CONFIG = {
 
   // ── Canvas ──────────────────────────────────────────────────
   canvas: {
-    width: 1200,       // logical width  (exported PNG = width × renderScale)
+    width: 1000,       // logical width  (exported PNG = width × renderScale)
     height: 500,        // logical height
     minRenderScale: 1,   // minimum backing-store multiplier
     maxRenderScale: 3,   // cap for high-DPI screens (3600×1500 export)

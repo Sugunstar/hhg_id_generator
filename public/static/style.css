@@ -34,6 +34,17 @@ html {
   overflow-x: hidden;
 }
 
+/* Hide all scrollbars globally */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
 body {
   background: var(--ink);
   color: var(--sand);
@@ -672,7 +683,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .card-builder-container {
@@ -681,29 +692,29 @@ body::after {
   align-items: center;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 /* Card Stage Container */
 .card-stage {
   position: relative;
   width: 100%;
-  max-width: 940px;
-  margin: 0 auto 28px;
+  max-width: 1050px;
+  margin: 0 auto 16px;
   perspective: 1200px;
   display: flex;
   justify-content: center;
   z-index: 10;
-  overflow: hidden;
-  padding: 12px 16px;
+  overflow: visible;
+  padding: 16px 20px;
   box-sizing: border-box;
 }
 
 .canvas-interactive-wrapper {
   position: relative;
   width: 100%;
-  max-width: 1050px;
-  aspect-ratio: 1200 / 500;
+  max-width: 100%;
+  aspect-ratio: 1000 / 500;
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow:
@@ -892,7 +903,7 @@ body::after {
 @media (max-width: 768px) {
   .container {
     padding: 10px 16px;
-    overflow-x: hidden;
+    overflow: visible;
   }
   .header h1 {
     white-space: nowrap;
@@ -904,7 +915,7 @@ body::after {
   .card-stage {
     margin-bottom: 20px;
     padding: 8px 10px;
-    overflow: hidden;
+    overflow: visible;
   }
   .canvas-interactive-wrapper {
     transform: rotate(-2.5deg);
@@ -938,7 +949,7 @@ body::after {
     height: auto;
     min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
   }
   .container {
     height: auto;
