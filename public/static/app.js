@@ -105,22 +105,36 @@
     }
 
     if (nameInput) {
-      nameInput.addEventListener('focus', () => focusCard(nameInput));
+      nameInput.addEventListener('focus', () => {
+        focusCard(nameInput);
+        renderCard();
+      });
+      nameInput.addEventListener('blur', () => {
+        renderCard();
+      });
       nameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
+          renderCard();
         }
       });
       nameInput.addEventListener('input', scheduleFastRender);
     }
 
     if (stackInput) {
-      stackInput.addEventListener('focus', () => focusCard(stackInput));
+      stackInput.addEventListener('focus', () => {
+        focusCard(stackInput);
+        renderCard();
+      });
+      stackInput.addEventListener('blur', () => {
+        renderCard();
+      });
       stackInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           unfocusCard();
+          renderCard();
         }
       });
       stackInput.addEventListener('input', scheduleFastRender);
@@ -356,6 +370,9 @@
     const textX = panelX + t.offsetX;
     const textMaxW = t.maxWidth;
 
+    const isNameFocused  = (document.activeElement === nameInput);
+    const isStackFocused = (document.activeElement === stackInput);
+
     // Eyebrow
     ctx.font = t.eyebrow.font;
     ctx.fillStyle = t.eyebrow.color;
@@ -364,8 +381,8 @@
     ctx.fillText(t.eyebrow.label, textX, panelY + t.eyebrow.offsetY);
     ctx.letterSpacing = '0px';
 
-    // Name (Only draw on canvas if user typed custom text; HTML overlay handles placeholder)
-    if (isNameCustom) {
+    // Name (Only draw on canvas if user typed text AND field is not actively focused)
+    if (isNameCustom && !isNameFocused) {
       ctx.font = t.name.font;
       ctx.fillStyle = t.name.color;
       ctx.textBaseline = 'top';
@@ -377,8 +394,8 @@
       ctx.fillText(displayName, textX, panelY + t.name.offsetY);
     }
 
-    // Stack / Role (Only draw on canvas if user typed custom text; HTML overlay handles placeholder)
-    if (isStackCustom) {
+    // Stack / Role (Only draw on canvas if user typed text AND field is not actively focused)
+    if (isStackCustom && !isStackFocused) {
       ctx.font = t.stack.font;
       ctx.fillStyle = t.stack.color;
       ctx.textBaseline = 'top';

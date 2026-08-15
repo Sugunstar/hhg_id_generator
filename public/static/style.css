@@ -875,7 +875,14 @@ body::after {
   border-color: var(--sunrise);
   background: rgba(244, 100, 42, 0.08);
   box-shadow: 0 0 0 2px rgba(244, 100, 42, 0.2);
+}
+
+.inline-name:focus {
   color: var(--sand);
+}
+
+.inline-stack:focus {
+  color: var(--sand-dim);
 }
 
 /* --- Font preload helpers (hidden, forces font load for Canvas) --- */
