@@ -34,17 +34,6 @@ html {
   overflow-x: hidden;
 }
 
-/* Hide all scrollbars globally */
-::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-* {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
 body {
   background: var(--ink);
   color: var(--sand);
@@ -82,19 +71,17 @@ body::after {
   z-index: 0;
 }
 
-/* --- Full Decorative Tree Background Covering Full Viewport --- */
+/* --- Full Decorative Tree Background Strip Along Bottom --- */
 .tree-border-bottom {
   position: fixed;
-  top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  aspect-ratio: 1440 / 887;
   background-image: url('assets/footer_trees.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center bottom;
+  background-position: bottom center;
   pointer-events: none;
   z-index: 1;
   opacity: 0.85;
@@ -695,18 +682,18 @@ body::after {
   overflow: visible;
 }
 
-/* Card Stage Container */
+/* Card Stage Container - Generously sized with overflow:visible so card corners never clip */
 .card-stage {
   position: relative;
   width: 100%;
   max-width: 1050px;
-  margin: 0 auto 16px;
+  margin: 0 auto 20px;
   perspective: 1200px;
   display: flex;
   justify-content: center;
   z-index: 10;
   overflow: visible;
-  padding: 16px 20px;
+  padding: 24px 32px;
   box-sizing: border-box;
 }
 
@@ -714,7 +701,7 @@ body::after {
   position: relative;
   width: 100%;
   max-width: 100%;
-  aspect-ratio: 1000 / 500;
+  aspect-ratio: 1200 / 500;
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow:
@@ -722,12 +709,13 @@ body::after {
     0 0 70px rgba(244, 100, 42, 0.1);
   transform: rotate(-4deg);
   transform-origin: center center;
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   z-index: 10;
 }
 
 .canvas-interactive-wrapper:hover,
 .canvas-interactive-wrapper.is-focused {
+  transform: rotate(0deg) scale(1.02);
   box-shadow:
     0 26px 65px rgba(0, 0, 0, 0.75),
     0 0 90px rgba(244, 100, 42, 0.2);
@@ -903,7 +891,6 @@ body::after {
 @media (max-width: 768px) {
   .container {
     padding: 10px 16px;
-    overflow: visible;
   }
   .header h1 {
     white-space: nowrap;
@@ -914,11 +901,11 @@ body::after {
   }
   .card-stage {
     margin-bottom: 20px;
-    padding: 8px 10px;
+    padding: 16px 14px;
     overflow: visible;
   }
   .canvas-interactive-wrapper {
-    transform: rotate(-2.5deg);
+    transform: rotate(-2deg);
   }
   .footer {
     padding: 10px 16px;
@@ -939,8 +926,12 @@ body::after {
 }
 
 @media (max-width: 480px) {
+  .card-stage {
+    padding: 12px 10px;
+    overflow: visible;
+  }
   .canvas-interactive-wrapper {
-    transform: rotate(-2deg);
+    transform: rotate(-1deg);
   }
 }
 
@@ -949,7 +940,6 @@ body::after {
     height: auto;
     min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: hidden;
   }
   .container {
     height: auto;
